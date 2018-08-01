@@ -1,0 +1,20 @@
+1) Add MIPMAP Engine as dependency.
+2) Build Interface with FoRule. transform(FORULE) -> Incremental FORULE
+
+
+    What is the exact interface I need?
+
+
+    public _ transform(_)
+
+    Each FORule has a targetView which is associated to an AlgebraTree
+
+    Understand the following:
+
+    Run a MipMap Example and display sourceView and TargetView
+
+    createTGD() at TGDListTopComponent see a TGD. OR EVEN BETTER
+
+    Use mipmapreduced to build Mapping Scenarios. Actually build it with csvs and xml... Then run full cycle. generatecandidatestttatget.java gives you candidate tgds
+
+3) Build in
