@@ -39,9 +39,9 @@ class Testbed {
             new InstanceTranslator().performAction(ivmTask, false, null);
             System.out.println(new GenerateSQL().generateSQL(ivmTask, 1).replaceAll("(?m)^delete from.*", "")); //remove all lines with delete from
 
-            //new DAOMappingTaskLines().saveMappingTask(ivmTask, "C:\\Users\\Artem\\OneDrive\\Desktop\\ivm.xml");
+            //new DAOMappingTaskLines().saveMappingTask(ivmTask, "C:\\Users\\Artem\\OneDrive\\Desktop\\utilities.xml");
             //final MappingTask t = new DAOMappingTask().loadMappingTask(1,
-             //       "C:\\Users\\Artem\\OneDrive\\Desktop\\ivm.xml",
+             //       "C:\\Users\\Artem\\OneDrive\\Desktop\\utilities.xml",
                //     SpicyEngineConstants.LINES_BASED_MAPPING_TASK,
                  //   false);
             //new InstanceTranslator().performAction( new DAOMappingTask().loadMappingTask(

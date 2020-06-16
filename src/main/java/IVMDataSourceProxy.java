@@ -52,7 +52,6 @@ class IVMDataSourceProxy extends AbstractDataSourceProxy {
     IVMDataSourceProxy(final IDataSourceProxy originalSourceProxy,
                        final IDataSourceProxy deltaSourceProxy,
                        final boolean schemaExists) throws SQLException, DAOException {
-        //TODO: Return IVM Source Proxy difference exception.
         final List<IDataSourceProxy> l = new ArrayList<>();
         this.duplicatesMap = new HashMap<>();
         l.add(originalSourceProxy);
@@ -85,11 +84,10 @@ class IVMDataSourceProxy extends AbstractDataSourceProxy {
                                             final AccessConfiguration accessConfiguration,
                                             final boolean schemaExists) throws DAOException,
                                                                                                   SQLException {
-        //TODO: This can be more incremental.
         Connection connection = new SimpleDbConnectionFactory().getConnection(accessConfiguration);
         Statement statement = connection.createStatement();
         if (!schemaExists) {
-            loadSchema(statement); // TODO: if necessary. Actually, get low level... don't just remove everything. increment 0 and add 1
+            loadSchema(statement);
         }
         else {
             final Map<String, List> tFilesMap = (HashMap) this.mergedProxy.getAnnotation(SpicyEngineConstants.CSV_INSTANCES_INFO_LIST);
@@ -261,21 +259,17 @@ class IVMDataSourceProxy extends AbstractDataSourceProxy {
                 if (createZeroCopy) {
                     ivmPathStepsZero.set(1, this.duplicatesMap.get(ivmPathStepsZero.get(1)).get(1));
                 }
-
-
             }
             else {
                 ivmPathSteps.set(1, "dataSource1_" + path.getPathSteps().get(1));
                 if (createZeroCopy) {
                     ivmPathStepsZero.set(1, "dataSource0_" + ivmPathStepsZero.get(1));
                 }
-
             }
 
             ivmPaths.add(new PathExpression(ivmPathSteps));
             if (createZeroCopy) {
                 ivmPathsZero.add(new PathExpression(ivmPathStepsZero));
-
             }
             final INode node = this.originalSourceProxy.getIntermediateSchema().getChild(relation);
             if (node instanceof SetCloneNode) {
@@ -319,7 +313,6 @@ class IVMDataSourceProxy extends AbstractDataSourceProxy {
         steps.set(0, "mipmaptask");
         steps.set(1, "dataSource1_" + steps.get(1));
         this.sqlProxy.addDuplication(new PathExpression(steps));
-        //super.addDuplication(new PathExpression(steps));
 
         final List<String> l  = new ArrayList<>();
         l.add(this.sqlProxy.getDuplications().get(this.sqlProxy.getDuplications().size()-1).getClonePath().getLastStep());
@@ -332,7 +325,6 @@ class IVMDataSourceProxy extends AbstractDataSourceProxy {
             this.sqlProxy.addDuplication(new PathExpression(zeroSteps));
            //super.addDuplication(new PathExpression(zeroSteps));
             this.duplicatesMap.get(clonePath.getLastStep()).add(this.sqlProxy.getDuplications().get(this.sqlProxy.getDuplications().size()-1).getClonePath().getLastStep());
-
         }
     }
 

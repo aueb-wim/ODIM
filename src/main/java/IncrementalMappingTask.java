@@ -15,6 +15,15 @@ public class IncrementalMappingTask extends MappingTask {
 
     private List<JoinCondition> joins;
 
+    /**
+     * An IncrementalMappingTask is created based on an original MIPMAP MappingTask and an IDataSourceProxy that
+     * contains incremental additions that the user wants to add to the IDataSourceProxy of the original MappingTask.
+     * @param originalTask
+     * @param deltaSourceProxy
+     * @param schemaExists whether the schema of tha mapping task exists in a relational form.
+     * @throws SQLException
+     * @throws DAOException
+     */
     public IncrementalMappingTask(final MappingTask originalTask,
                            final IDataSourceProxy deltaSourceProxy,
                            final boolean schemaExists) throws SQLException, DAOException {
@@ -29,7 +38,6 @@ public class IncrementalMappingTask extends MappingTask {
         for (final ValueCorrespondence c : originalTask.getValueCorrespondences()) {
             this.addCorrespondence(c);
         }
-
     }
 
     private PathExpression getIVMSourcePath(final PathExpression sourcePath, final int i) {
@@ -65,7 +73,8 @@ public class IncrementalMappingTask extends MappingTask {
     @Override
     public void addCorrespondence(final ValueCorrespondence c) {
         final List<PathExpression> sourcePaths = c.getSourcePaths();
-        if (sourcePaths != null && (sourcePaths.size() == 1 || sourcePaths.get(0).getPathSteps().get(1).equals(sourcePaths.get(1).getPathSteps().get(1)))) {
+        if (sourcePaths != null && (sourcePaths.size() == 1 ||
+                sourcePaths.get(0).getPathSteps().get(1).equals(sourcePaths.get(1).getPathSteps().get(1)))) {
             final List<PathExpression> ivmPaths = new ArrayList<>();
             for (final PathExpression path : sourcePaths) {
                 ivmPaths.add(getIVMSourcePath(path, 1));
@@ -81,9 +90,13 @@ public class IncrementalMappingTask extends MappingTask {
                     ivm2Paths.add(getIVMSourcePath(path, 0));
                 }
 
-                super.addCorrespondence(new ValueCorrespondence(ivm2Paths, c.getTargetPath(), getIVMTransformationFunction(c, 0)));
+                super.addCorrespondence(new ValueCorrespondence(
+                        ivm2Paths,
+                        c.getTargetPath(),
+                        getIVMTransformationFunction(c, 0)));
             }
-        } else if (sourcePaths != null && sourcePaths.size() == 2 && !sourcePaths.get(0).getPathSteps().get(1).equals(sourcePaths.get(1).getPathSteps().get(1))) {
+        } else if (sourcePaths != null && sourcePaths.size() == 2 &&
+                   !sourcePaths.get(0).getPathSteps().get(1).equals(sourcePaths.get(1).getPathSteps().get(1))) {
 
             final List<PathExpression> ivm1Paths = new ArrayList<>();
             ivm1Paths.add(getIVMSourcePath(sourcePaths.get(0), 1));
@@ -91,8 +104,10 @@ public class IncrementalMappingTask extends MappingTask {
 
             final Expression exp = getIVMTransformationFunction(c, 1);
             String fString = exp.toString().replaceAll(
-                    "mipmaptask\\.dataSource1_" + sourcePaths.get(1).getPathSteps().get(1) + "\\." + "dataSource1_" + sourcePaths.get(1).getPathSteps().get(1),
-                    "mipmaptask.dataSource0_" + sourcePaths.get(1).getPathSteps().get(1) + "." + "dataSource0_" + sourcePaths.get(1).getPathSteps().get(1));
+                    "mipmaptask\\.dataSource1_" + sourcePaths.get(1).getPathSteps().get(1)
+                            + "\\." + "dataSource1_" + sourcePaths.get(1).getPathSteps().get(1),
+                    "mipmaptask.dataSource0_" + sourcePaths.get(1).getPathSteps().get(1)
+                            + "." + "dataSource0_" + sourcePaths.get(1).getPathSteps().get(1));
 
             super.addCorrespondence(new ValueCorrespondence(ivm1Paths, c.getTargetPath(), new Expression(fString)));
 
@@ -103,8 +118,10 @@ public class IncrementalMappingTask extends MappingTask {
 
             final Expression exp2 = getIVMTransformationFunction(c, 0);
             String fString2 = exp2.toString().replaceAll(
-                    "mipmaptask\\.dataSource0_" + sourcePaths.get(1).getPathSteps().get(1) + "\\." + "dataSource0_" + sourcePaths.get(1).getPathSteps().get(1),
-                    "mipmaptask.dataSource1_" + sourcePaths.get(1).getPathSteps().get(1) + "." + "dataSource1_" + sourcePaths.get(1).getPathSteps().get(1));
+                    "mipmaptask\\.dataSource0_" + sourcePaths.get(1).getPathSteps().get(1)
+                            + "\\." + "dataSource0_" + sourcePaths.get(1).getPathSteps().get(1),
+                    "mipmaptask.dataSource1_" + sourcePaths.get(1).getPathSteps().get(1)
+                            + "." + "dataSource1_" + sourcePaths.get(1).getPathSteps().get(1));
             super.addCorrespondence(new ValueCorrespondence(ivm2Paths, c.getTargetPath(), new Expression(fString2)));
         } else if (sourcePaths == null) {
             super.addCorrespondence(c);

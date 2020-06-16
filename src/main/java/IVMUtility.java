@@ -26,12 +26,6 @@ public class IVMUtility {
         return labels;
     }
 
-    static String generateSQLforIVM(final MappingTask task, final boolean dropTables) {
-        final String script = new GenerateSQL().generateSQL(task, 1);
-        return script.replaceAll("(?m)^delete from.*", "");
-
-    }
-
 
     static AccessConfiguration obtainAccessConfiguration() {
         final AccessConfiguration accessConfiguration = new AccessConfiguration();
